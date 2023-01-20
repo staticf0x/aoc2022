@@ -93,4 +93,27 @@ fn main() {
 
     dbg!("{:?}", &sizes);
     println!("Total: {total}");
+
+    println!("");
+
+    const DISK_SIZE: usize = 70000000;
+    const REQUIRED: usize = 30000000;
+
+    let used_size = sizes.get("/").unwrap();
+    let free_space = DISK_SIZE - used_size;
+    let need_to_delete = REQUIRED - free_space;
+
+    println!("Used            {used_size} / {DISK_SIZE}");
+    println!("Free space:     {free_space}");
+    println!("Need to delete: {need_to_delete}");
+
+    let mut sizes_only: Vec<usize> = sizes.iter().map(|(_, v)| *v).collect();
+    sizes_only.sort();
+
+    for size in &sizes_only {
+        if *size > need_to_delete {
+            println!("Delete {size} bytes");
+            break;
+        }
+    }
 }
